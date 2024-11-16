@@ -23,6 +23,7 @@
     </developers>
     <modules>
         <module>member</module>
+        <module>common</module>
     </modules>
     <scm>
         <connection/>
@@ -43,6 +44,12 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.jiawa</groupId>
+                <artifactId>common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
             <dependency>
