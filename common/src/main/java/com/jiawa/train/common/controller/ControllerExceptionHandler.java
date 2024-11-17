@@ -4,9 +4,14 @@ import com.jiawa.train.common.exception.BusinessException;
 import com.jiawa.train.common.resp.CommonResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.validation.BindException;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * 统一异常处理、数据预处理等
@@ -45,5 +50,24 @@ public class ControllerExceptionHandler {
         commonResp.setMessage(e.getE().getDesc());
         return commonResp;
     }
+
+    /**
+     * 校验异常统一处理
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = BindException.class)
+    @ResponseBody
+    public CommonResp exceptionHandler(BindException e) {
+        CommonResp commonResp = new CommonResp();
+        List<ObjectError> errors = e.getBindingResult().getAllErrors();
+        StringJoiner errorsMessage = new StringJoiner(", ");
+        errors.forEach(em -> errorsMessage.add(em.getDefaultMessage()));
+        LOG.error("校验异常：{}", errorsMessage.toString());
+        commonResp.setSuccess(false);
+        commonResp.setMessage(errorsMessage.toString());
+        return commonResp;
+    }
+
 
 }
