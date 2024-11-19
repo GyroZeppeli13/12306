@@ -26,4 +26,9 @@ public class LoginMemberContext {
         }
     }
 
+    public static void removeMember() {
+        member.remove();
+    }
+
+
 }
