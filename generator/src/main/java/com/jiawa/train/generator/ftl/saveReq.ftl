@@ -48,4 +48,4 @@ public class ${Domain}SaveReq {
         sb.append("]");
         return sb.toString();
     }
-}>
+}
