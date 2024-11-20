@@ -11,6 +11,7 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/passenger")
 public class PassengerController {

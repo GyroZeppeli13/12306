@@ -1,4 +1,4 @@
-package com.jiawa.train.member.req;
+package com.jiawa.train.${module}.req;
 
 <#list typeSet as type>
 <#if type=='Date'>

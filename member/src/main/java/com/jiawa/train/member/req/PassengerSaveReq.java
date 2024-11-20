@@ -1,11 +1,10 @@
 package com.jiawa.train.member.req;
 
+import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-
-import java.util.Date;
 
 @Data
 public class PassengerSaveReq {
