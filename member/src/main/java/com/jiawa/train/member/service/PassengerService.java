@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class PassengerService {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MemberService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PassengerService.class);
 
     @Resource
     private PassengerMapper passengerMapper;
@@ -32,15 +32,13 @@ public class PassengerService {
     public void save(PassengerSaveReq req) {
         DateTime now = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
-
-        if(ObjectUtil.isNull(req.getId())) {
+        if (ObjectUtil.isNull(passenger.getId())) {
             passenger.setMemberId(LoginMemberContext.getId());
             passenger.setId(SnowUtil.getSnowflakeNextId());
             passenger.setCreateTime(now);
             passenger.setUpdateTime(now);
             passengerMapper.insert(passenger);
-        }
-        else {
+        } else {
             passenger.setUpdateTime(now);
             passengerMapper.updateByPrimaryKey(passenger);
         }
@@ -50,22 +48,24 @@ public class PassengerService {
         PassengerExample passengerExample = new PassengerExample();
         passengerExample.setOrderByClause("id desc");
         PassengerExample.Criteria criteria = passengerExample.createCriteria();
-        if(ObjectUtil.isNotNull(req.getMemberId())) {
+        if (ObjectUtil.isNotNull(req.getMemberId())) {
             criteria.andMemberIdEqualTo(req.getMemberId());
         }
+
         LOG.info("查询页码：{}", req.getPage());
         LOG.info("每页条数：{}", req.getSize());
         PageHelper.startPage(req.getPage(), req.getSize());
-        List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
+        List<Passenger> passengerList = passengerMapper.selectByExample(passengerExample);
 
-        PageInfo<Passenger> passengerPageInfo = new PageInfo<>(passengers);
-        LOG.info("总行数：{}", passengerPageInfo.getTotal());
-        LOG.info("总页数：{}", passengerPageInfo.getPages());
+        PageInfo<Passenger> pageInfo = new PageInfo<>(passengerList);
+        LOG.info("总行数：{}", pageInfo.getTotal());
+        LOG.info("总页数：{}", pageInfo.getPages());
 
-        List<PassengerQueryResp> passengerQueryResps = BeanUtil.copyToList(passengers, PassengerQueryResp.class);
+        List<PassengerQueryResp> list = BeanUtil.copyToList(passengerList, PassengerQueryResp.class);
+
         PageResp<PassengerQueryResp> pageResp = new PageResp<>();
-        pageResp.setTotal(passengerPageInfo.getTotal());
-        pageResp.setList(passengerQueryResps);
+        pageResp.setTotal(pageInfo.getTotal());
+        pageResp.setList(list);
         return pageResp;
     }
 
