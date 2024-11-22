@@ -20,6 +20,12 @@
             <a style="color: red">删除</a>
           </a-popconfirm>
           <a @click="onEdit(record)">编辑</a>
+          <a-popconfirm
+              title="生成座位将删除已有记录，确认生成座位?"
+              @confirm="genSeat(record)"
+              ok-text="确认" cancel-text="取消">
+            <a>生成座位</a>
+          </a-popconfirm>
         </a-space>
       </template>
       <template v-else-if="column.dataIndex === 'type'">
@@ -147,16 +153,16 @@ export default defineComponent({
       }
     ];
 
-    watch(() => train.value.start, ()=>{
+    watch(() => train.value.start, () => {
       if (Tool.isNotEmpty(train.value.start)) {
-        train.value.startPinyin = pinyin(train.value.start, { toneType: 'none'}).replaceAll(" ", "");
+        train.value.startPinyin = pinyin(train.value.start, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.value.startPinyin = "";
       }
     }, {immediate: true});
-    watch(() => train.value.end, ()=>{
+    watch(() => train.value.end, () => {
       if (Tool.isNotEmpty(train.value.end)) {
-        train.value.endPinyin = pinyin(train.value.end, { toneType: 'none'}).replaceAll(" ", "");
+        train.value.endPinyin = pinyin(train.value.end, {toneType: 'none'}).replaceAll(" ", "");
       } else {
         train.value.endPinyin = "";
       }
@@ -238,6 +244,19 @@ export default defineComponent({
       });
     };
 
+    const genSeat = (record) => {
+      loading.value = true;
+      axios.get("/business/admin/train/gen-seat/" + record.code).then((response) => {
+        loading.value = false;
+        const data = response.data;
+        if (data.success) {
+          notification.success({description: "生成成功！"});
+        } else {
+          notification.error({description: data.message});
+        }
+      });
+    };
+
     onMounted(() => {
       handleQuery({
         page: 1,
@@ -258,7 +277,8 @@ export default defineComponent({
       onAdd,
       handleOk,
       onEdit,
-      onDelete
+      onDelete,
+      genSeat
     };
   },
 });
