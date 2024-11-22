@@ -5,5 +5,5 @@ import lombok.Data;
 
 @Data
 public class train_seatQueryReq extends PageReq {
-
+    private String trainCode;
 }
