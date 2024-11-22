@@ -5,14 +5,15 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.jiawa.train.common.resp.PageResp;
-import com.jiawa.train.common.util.SnowUtil;
 import com.jiawa.train.business.domain.train_carriage;
 import com.jiawa.train.business.domain.train_carriageExample;
+import com.jiawa.train.business.enums.SeatColEnum;
 import com.jiawa.train.business.mapper.train_carriageMapper;
 import com.jiawa.train.business.req.train_carriageQueryReq;
 import com.jiawa.train.business.req.train_carriageSaveReq;
 import com.jiawa.train.business.resp.train_carriageQueryResp;
+import com.jiawa.train.common.resp.PageResp;
+import com.jiawa.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,17 +31,24 @@ public class train_carriageService {
 
     public void save(train_carriageSaveReq req) {
         DateTime now = DateTime.now();
-        train_carriage train_carriage = BeanUtil.copyProperties(req, train_carriage.class);
-        if (ObjectUtil.isNull(train_carriage.getId())) {
-            train_carriage.setId(SnowUtil.getSnowflakeNextId());
-            train_carriage.setCreateTime(now);
-            train_carriage.setUpdateTime(now);
-            train_carriageMapper.insert(train_carriage);
+
+        // 自动计算出列数和总座位数
+        List<SeatColEnum> seatColEnums = SeatColEnum.getColsByType(req.getSeatType());
+        req.setColCount(seatColEnums.size());
+        req.setSeatCount(req.getColCount() * req.getRowCount());
+
+        train_carriage trainCarriage = BeanUtil.copyProperties(req, train_carriage.class);
+        if (ObjectUtil.isNull(trainCarriage.getId())) {
+            trainCarriage.setId(SnowUtil.getSnowflakeNextId());
+            trainCarriage.setCreateTime(now);
+            trainCarriage.setUpdateTime(now);
+            train_carriageMapper.insert(trainCarriage);
         } else {
-            train_carriage.setUpdateTime(now);
-            train_carriageMapper.updateByPrimaryKey(train_carriage);
+            trainCarriage.setUpdateTime(now);
+            train_carriageMapper.updateByPrimaryKey(trainCarriage);
         }
     }
+
 
     public PageResp<train_carriageQueryResp> queryList(train_carriageQueryReq req) {
         train_carriageExample train_carriageExample = new train_carriageExample();
