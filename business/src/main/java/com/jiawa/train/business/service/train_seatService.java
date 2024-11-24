@@ -121,6 +121,14 @@ public class train_seatService {
                 }
             }
         }
-
     }
+
+    public List<train_seat> selectByTrainCode(String trainCode) {
+        train_seatExample trainSeatExample = new train_seatExample();
+        trainSeatExample.setOrderByClause("`id` asc");
+        train_seatExample.Criteria criteria = trainSeatExample.createCriteria();
+        criteria.andTrainCodeEqualTo(trainCode);
+        return train_seatMapper.selectByExample(trainSeatExample);
+    }
+
 }
