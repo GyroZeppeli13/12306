@@ -1,72 +1,72 @@
 <template>
-    <p>
-      <a-space>
-        <a-button type="primary" @click="handleQuery()">刷新</a-button>
-        <#if !readOnly><a-button type="primary" @click="onAdd">新增</a-button></#if>
-      </a-space>
-    </p>
-    <a-table :dataSource="${domain}s"
-             :columns="columns"
-             :pagination="pagination"
-             @change="handleTableChange"
-             :loading="loading">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'operation'">
-          <#if !readOnly>
+  <p>
+    <a-space>
+      <a-button type="primary" @click="handleQuery()">刷新</a-button>
+      <#if !readOnly><a-button type="primary" @click="onAdd">新增</a-button></#if>
+    </a-space>
+  </p>
+  <a-table :dataSource="${domain}s"
+           :columns="columns"
+           :pagination="pagination"
+           @change="handleTableChange"
+           :loading="loading">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.dataIndex === 'operation'">
+        <#if !readOnly>
           <a-space>
             <a-popconfirm
-                title="删除后不可恢复，确认删除?"
-                @confirm="onDelete(record)"
-                ok-text="确认" cancel-text="取消">
+                    title="删除后不可恢复，确认删除?"
+                    @confirm="onDelete(record)"
+                    ok-text="确认" cancel-text="取消">
               <a style="color: red">删除</a>
             </a-popconfirm>
             <a @click="onEdit(record)">编辑</a>
           </a-space>
-          </#if>
-        </template>
-        <#list fieldList as field>
-          <#if field.enums>
-        <template v-else-if="column.dataIndex === '${field.nameHump}'">
-          <span v-for="item in ${field.enumsConst}_ARRAY" :key="item.code">
-            <span v-if="item.code === record.${field.nameHump}">
-              {{item.desc}}
-            </span>
-          </span>
-        </template>
-          </#if>
-        </#list>
+        </#if>
       </template>
-    </a-table>
-    <#if !readOnly>
+      <#list fieldList as field>
+        <#if field.enums>
+          <template v-else-if="column.dataIndex === '${field.nameHump}'">
+        <span v-for="item in ${field.enumsConst}_ARRAY" :key="item.code">
+          <span v-if="item.code === record.${field.nameHump}">
+            {{item.desc}}
+          </span>
+        </span>
+          </template>
+        </#if>
+      </#list>
+    </template>
+  </a-table>
+  <#if !readOnly>
     <a-modal v-model:visible="visible" title="${tableNameCn}" @ok="handleOk"
              ok-text="确认" cancel-text="取消">
       <a-form :model="${domain}" :label-col="{span: 4}" :wrapper-col="{ span: 20 }">
         <#list fieldList as field>
           <#if field.name!="id" && field.nameHump!="createTime" && field.nameHump!="updateTime">
-        <a-form-item label="${field.nameCn}">
-          <#if field.enums>
-          <a-select v-model:value="${domain}.${field.nameHump}">
-            <a-select-option v-for="item in ${field.enumsConst}_ARRAY" :key="item.code" :value="item.code">
-              {{item.desc}}
-            </a-select-option>
-          </a-select>
-          <#elseif field.javaType=='Date'>
-            <#if field.type=='time'>
-          <a-time-picker v-model:value="${domain}.${field.nameHump}" valueFormat="HH:mm:ss" placeholder="请选择时间" />
-            <#elseif field.type=='date'>
-          <a-date-picker v-model:value="${domain}.${field.nameHump}" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
-            <#else>
-          <a-date-picker v-model:value="${domain}.${field.nameHump}" valueFormat="YYYY-MM-DD HH:mm:ss" show-time placeholder="请选择日期" />
-            </#if>
-          <#else>
-          <a-input v-model:value="${domain}.${field.nameHump}" />
-          </#if>
-        </a-form-item>
+            <a-form-item label="${field.nameCn}">
+              <#if field.enums>
+                <a-select v-model:value="${domain}.${field.nameHump}">
+                  <a-select-option v-for="item in ${field.enumsConst}_ARRAY" :key="item.code" :value="item.code">
+                    {{item.desc}}
+                  </a-select-option>
+                </a-select>
+              <#elseif field.javaType=='Date'>
+                <#if field.type=='time'>
+                  <a-time-picker v-model:value="${domain}.${field.nameHump}" valueFormat="HH:mm:ss" placeholder="请选择时间" />
+                <#elseif field.type=='date'>
+                  <a-date-picker v-model:value="${domain}.${field.nameHump}" valueFormat="YYYY-MM-DD" placeholder="请选择日期" />
+                <#else>
+                  <a-date-picker v-model:value="${domain}.${field.nameHump}" valueFormat="YYYY-MM-DD HH:mm:ss" show-time placeholder="请选择日期" />
+                </#if>
+              <#else>
+                <a-input v-model:value="${domain}.${field.nameHump}" />
+              </#if>
+            </a-form-item>
           </#if>
         </#list>
       </a-form>
     </a-modal>
-    </#if>
+  </#if>
 </template>
 
 <script>
@@ -97,21 +97,21 @@
       });
       let loading = ref(false);
       const columns = [
-      <#list fieldList as field>
+        <#list fieldList as field>
         <#if field.name!="id" && field.nameHump!="createTime" && field.nameHump!="updateTime">
-      {
-        title: '${field.nameCn}',
-        dataIndex: '${field.nameHump}',
-        key: '${field.nameHump}',
-      },
+        {
+          title: '${field.nameCn}',
+          dataIndex: '${field.nameHump}',
+          key: '${field.nameHump}',
+        },
         </#if>
-      </#list>
-      <#if !readOnly>
-      {
-        title: '操作',
-        dataIndex: 'operation'
-      }
-      </#if>
+        </#list>
+        <#if !readOnly>
+        {
+          title: '操作',
+          dataIndex: 'operation'
+        }
+        </#if>
       ];
 
       <#if !readOnly>
@@ -184,11 +184,12 @@
         });
       };
 
-      const handleTableChange = (pagination) => {
-        // console.log("看看自带的分页参数都有啥：" + pagination);
+      const handleTableChange = (page) => {
+        // console.log("看看自带的分页参数都有啥：" + JSON.stringify(page));
+        pagination.value.pageSize = page.pageSize;
         handleQuery({
-          page: pagination.current,
-          size: pagination.pageSize
+          page: page.current,
+          size: page.pageSize
         });
       };
 
