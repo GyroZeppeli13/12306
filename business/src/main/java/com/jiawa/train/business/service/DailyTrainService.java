@@ -119,7 +119,7 @@ public class DailyTrainService {
         dailyTrainMapper.insert(dailyTrain);
 
         // 生成该车次的车站数据
-//        dailyTrainStationService.genDaily(date, train.getCode());
+        dailyTrainStationService.genDaily(date, train.getCode());
         LOG.info("生成日期【{}】车次【{}】的信息结束", DateUtil.formatDate(date), train.getCode());
     }
 }

@@ -112,11 +112,11 @@ public class TrainStationService {
         trainStationMapper.deleteByPrimaryKey(id);
     }
 
-//    public List<TrainStation> selectByTrainCode(String trainCode) {
-//        TrainStationExample trainStationExample = new TrainStationExample();
-//        trainStationExample.setOrderByClause("`index` asc");
-//        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
-//        return trainStationMapper.selectByExample(trainStationExample);
-//    }
+    public List<TrainStation> selectByTrainCode(String trainCode) {
+        TrainStationExample trainStationExample = new TrainStationExample();
+        trainStationExample.setOrderByClause("`index` asc");
+        trainStationExample.createCriteria().andTrainCodeEqualTo(trainCode);
+        return trainStationMapper.selectByExample(trainStationExample);
+    }
 
 }
