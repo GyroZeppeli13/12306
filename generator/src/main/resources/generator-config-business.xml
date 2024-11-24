@@ -47,6 +47,7 @@
 <!--        <table tableName="train" domainObjectName="Train"/>-->
 <!--        <table tableName="train_station" domainObjectName="TrainStation"/>-->
 <!--        <table tableName="train_carriage" domainObjectName="train_carriage"/>-->
-        <table tableName="train_seat" domainObjectName="train_seat"/>
+<!--        <table tableName="train_seat" domainObjectName="train_seat"/>-->
+        <table tableName="daily_train" domainObjectName="DailyTrain"/>
     </context>
 </generatorConfiguration>

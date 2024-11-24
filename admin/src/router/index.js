@@ -5,10 +5,10 @@ const routes = [{
   component: () => import('../views/main.vue'),
   children: [{
     path: 'welcome',
-    component: () => import('../views/main/base/welcome.vue'),
+    component: () => import('../views/main/welcome.vue'),
   }, {
     path: 'about',
-    component: () => import('../views/main/base/about.vue'),
+    component: () => import('../views/main/about.vue'),
   }, {
     path: 'base/',
     children: [{
@@ -26,6 +26,12 @@ const routes = [{
     }, {
       path: 'train-seat',
       component: () => import('../views/main/base/train-seat.vue'),
+    }]
+  }, {
+    path: 'business/',
+    children: [{
+      path: 'daily-train',
+      component: () => import('../views/main/business/daily-train.vue'),
     }]
   }, {
     path: 'batch/',
