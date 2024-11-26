@@ -5,6 +5,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jiawa.train.common.context.LoginMemberContext;
 import com.jiawa.train.common.resp.PageResp;
 import com.jiawa.train.common.util.SnowUtil;
 import com.jiawa.train.member.domain.Passenger;
@@ -29,6 +30,7 @@ public class PassengerService {
     private PassengerMapper passengerMapper;
 
     public void save(PassengerSaveReq req) {
+        req.setMemberId(LoginMemberContext.getId());
         DateTime now = DateTime.now();
         Passenger passenger = BeanUtil.copyProperties(req, Passenger.class);
         if (ObjectUtil.isNull(passenger.getId())) {
@@ -70,4 +72,14 @@ public class PassengerService {
     public void delete(Long id) {
         passengerMapper.deleteByPrimaryKey(id);
     }
+
+    public List<PassengerQueryResp> queryMine() {
+        PassengerExample passengerExample = new PassengerExample();
+        passengerExample.setOrderByClause("name asc");
+        PassengerExample.Criteria criteria = passengerExample.createCriteria();
+        criteria.andMemberIdEqualTo(LoginMemberContext.getId());
+        List<Passenger> passengers = passengerMapper.selectByExample(passengerExample);
+        return BeanUtil.copyToList(passengers, PassengerQueryResp.class);
+    }
+
 }
