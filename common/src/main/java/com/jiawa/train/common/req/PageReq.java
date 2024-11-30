@@ -3,7 +3,9 @@ package com.jiawa.train.common.req;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 
-public class PageReq {
+import java.io.Serializable;
+
+public class PageReq implements Serializable{
 
     @NotNull(message = "【页码】不能为空")
     private Integer page;
