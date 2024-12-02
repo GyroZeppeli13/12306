@@ -1,0 +1,6 @@
+POST http://localhost:8000/business/confirm-order/do
+Content-Type: application/json
+token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuYmYiOjE3MzMxMDkwMzEsIm1vYmlsZSI6IjEzMDAwMDAwMDAwIiwiaWQiOjE4NTgwOTkyMTU0NTI5OTk2ODAsImV4cCI6MTczMzE5NTQzMSwiaWF0IjoxNzMzMTA5MDMxfQ.qbQp5rstyB8EYahR0VbND2LQVOF625gAq8wDW1USijk
+
+{"dailyTrainTicketId":"1863420534868545537","date":"2024-12-02","trainCode":"D1","start":"北京","end":"上海","tickets":[{"passengerId":"1858787944601620481","passengerType":"1","seatTypeCode":"4","passengerName":"zj1","passengerIdCard":"1233211232313132","seat":null}]}
+###
