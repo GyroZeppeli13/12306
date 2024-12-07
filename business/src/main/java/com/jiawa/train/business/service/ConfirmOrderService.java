@@ -116,7 +116,7 @@ public class ConfirmOrderService {
             LOG.info("令牌校验不通过");
             throw new BusinessException(BusinessExceptionEnum.CONFIRM_ORDER_SK_TOKEN_FAIL);
         }
-        
+
         String lockKey = DateUtil.formatDate(req.getDate()) + "-" + req.getTrainCode();
         RLock lock = null;
         try {
