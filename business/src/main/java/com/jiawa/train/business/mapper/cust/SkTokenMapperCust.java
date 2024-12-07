@@ -6,5 +6,5 @@ import java.util.Date;
 
 public interface SkTokenMapperCust {
 
-    int decrease(@Param("date") Date date, @Param("trainCode") String trainCode);
+    int decrease(@Param("date") Date date, @Param("trainCode") String trainCode,@Param("decreaseCount") int decreaseCount);
 }
