@@ -1,6 +1,7 @@
 package com.jiawa.train.business.controller;
 
 import com.jiawa.train.business.req.ConfirmOrderDoReq;
+import com.jiawa.train.business.service.BeforeConfirmOrderService;
 import com.jiawa.train.business.service.ConfirmOrderService;
 import com.jiawa.train.common.resp.CommonResp;
 import jakarta.annotation.Resource;
@@ -27,6 +28,9 @@ public class ConfirmOrderController {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
+    @Resource
+    private BeforeConfirmOrderService beforeConfirmOrderService;
+
     // 接口的资源名称不要和接口路径一致，会导致限流后走不到降级方法中
 //    @SentinelResource(value = "confirmOrderDo", blockHandler = "doConfirmBlock")
     @PostMapping("/do")
@@ -48,7 +52,8 @@ public class ConfirmOrderController {
             redisTemplate.delete(imageCodeToken);
         }
 
-        confirmOrderService.doConfirm(req);
+//        confirmOrderService.doConfirm(req);
+        beforeConfirmOrderService.beforeDoConfirm(req);
         return new CommonResp<>();
     }
 

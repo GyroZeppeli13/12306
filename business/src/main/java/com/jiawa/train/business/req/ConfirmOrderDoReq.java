@@ -66,6 +66,11 @@ public class ConfirmOrderDoReq {
     @NotBlank(message = "【图片验证码】参数非法")
     private String imageCodeToken;
 
+    /**
+     * 日志跟踪号
+     */
+    private String logId;
+
     @Override
     public String toString() {
         return "ConfirmOrderDoReq{" +
@@ -78,6 +83,7 @@ public class ConfirmOrderDoReq {
                 ", tickets=" + tickets +
                 ", imageCode='" + imageCode + '\'' +
                 ", imageCodeToken='" + imageCodeToken + '\'' +
+                ", logId='" + logId + '\'' +
                 '}';
     }
 }
