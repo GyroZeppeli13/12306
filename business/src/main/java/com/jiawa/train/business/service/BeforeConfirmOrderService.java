@@ -7,6 +7,7 @@ import com.jiawa.train.business.enums.ConfirmOrderStatusEnum;
 import com.jiawa.train.business.enums.RocketMQTopicEnum;
 import com.jiawa.train.business.mapper.ConfirmOrderMapper;
 import com.jiawa.train.business.req.ConfirmOrderDoReq;
+import com.jiawa.train.business.req.ConfirmOrderMQDto;
 import com.jiawa.train.business.req.ConfirmOrderTicketReq;
 import com.jiawa.train.common.context.LoginMemberContext;
 import com.jiawa.train.common.exception.BusinessException;
@@ -69,12 +70,14 @@ public class BeforeConfirmOrderService {
         confirmOrder.setDailyTrainTicketId(req.getDailyTrainTicketId());
         confirmOrder.setStatus(ConfirmOrderStatusEnum.INIT.getCode());
         confirmOrder.setTickets(JSON.toJSONString(tickets));
-        // 发送MQ排队购票
-        req.setLogId(MDC.get("LOG_ID"));
         confirmOrderMapper.insert(confirmOrder);
 
         // 发送MQ排队购票
-        String reqJson = JSON.toJSONString(req);
+        ConfirmOrderMQDto confirmOrderMQDto = new ConfirmOrderMQDto();
+        confirmOrderMQDto.setDate(req.getDate());
+        confirmOrderMQDto.setTrainCode(req.getTrainCode());
+        confirmOrderMQDto.setLogId(MDC.get("LOG_ID"));
+        String reqJson = JSON.toJSONString(confirmOrderMQDto);
         LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
         rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
         LOG.info("排队购票，发送mq结束");
