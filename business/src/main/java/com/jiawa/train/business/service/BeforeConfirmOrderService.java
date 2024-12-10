@@ -4,7 +4,6 @@ import cn.hutool.core.date.DateTime;
 import com.alibaba.fastjson.JSON;
 import com.jiawa.train.business.domain.ConfirmOrder;
 import com.jiawa.train.business.enums.ConfirmOrderStatusEnum;
-import com.jiawa.train.business.enums.RocketMQTopicEnum;
 import com.jiawa.train.business.mapper.ConfirmOrderMapper;
 import com.jiawa.train.business.req.ConfirmOrderDoReq;
 import com.jiawa.train.business.req.ConfirmOrderMQDto;
@@ -14,7 +13,6 @@ import com.jiawa.train.common.exception.BusinessException;
 import com.jiawa.train.common.exception.BusinessExceptionEnum;
 import com.jiawa.train.common.util.SnowUtil;
 import jakarta.annotation.Resource;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -35,8 +33,12 @@ public class BeforeConfirmOrderService {
     @Autowired
     private SkTokenService skTokenService;
 
-    @Resource
-    public RocketMQTemplate rocketMQTemplate;
+//    @Resource
+//    public RocketMQTemplate rocketMQTemplate;
+
+//    @SentinelResource(value = "beforeDoConfirm", blockHandler = "beforeDoConfirmBlock")
+@Resource
+private ConfirmOrderService confirmOrderService;
 
 //    @SentinelResource(value = "beforeDoConfirm", blockHandler = "beforeDoConfirmBlock")
     public Long beforeDoConfirm(ConfirmOrderDoReq req) {
@@ -78,9 +80,11 @@ public class BeforeConfirmOrderService {
         confirmOrderMQDto.setTrainCode(req.getTrainCode());
         confirmOrderMQDto.setLogId(MDC.get("LOG_ID"));
         String reqJson = JSON.toJSONString(confirmOrderMQDto);
-        LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
-        rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
-        LOG.info("排队购票，发送mq结束");
+//        LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
+//        rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
+//        LOG.info("排队购票，发送mq结束");
+
+        confirmOrderService.doConfirm(confirmOrderMQDto);
 
         return confirmOrder.getId();
 
