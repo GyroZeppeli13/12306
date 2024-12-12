@@ -73,4 +73,10 @@ public class ConfirmOrderController {
 //        return commonResp;
 //
 //    }
+
+    @GetMapping("/cancel/{id}")
+    public CommonResp<Integer> cancel(@PathVariable Long id) {
+        Integer count = confirmOrderService.cancel(id);
+        return new CommonResp<>(count);
+    }
 }
