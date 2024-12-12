@@ -41,7 +41,10 @@ public class BeforeConfirmOrderService {
 private ConfirmOrderService confirmOrderService;
 
 //    @SentinelResource(value = "beforeDoConfirm", blockHandler = "beforeDoConfirmBlock")
-    public Long beforeDoConfirm(ConfirmOrderDoReq req) {
+public Long beforeDoConfirm(ConfirmOrderDoReq req) {
+    Long id = null;
+    // 根据前端传值，加入排队人数
+    for (int i = 0; i < req.getLineNumber() + 1; i++) {
         req.setMemberId(LoginMemberContext.getId());
         // 校验令牌余量
         boolean validSkToken = skTokenService.validSkToken(req.getDate(), req.getTrainCode(), LoginMemberContext.getId());
@@ -80,15 +83,14 @@ private ConfirmOrderService confirmOrderService;
         confirmOrderMQDto.setTrainCode(req.getTrainCode());
         confirmOrderMQDto.setLogId(MDC.get("LOG_ID"));
         String reqJson = JSON.toJSONString(confirmOrderMQDto);
-//        LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
-//        rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
-//        LOG.info("排队购票，发送mq结束");
-
+        // LOG.info("排队购票，发送mq开始，消息：{}", reqJson);
+        // rocketMQTemplate.convertAndSend(RocketMQTopicEnum.CONFIRM_ORDER.getCode(), reqJson);
+        // LOG.info("排队购票，发送mq结束");
         confirmOrderService.doConfirm(confirmOrderMQDto);
-
-        return confirmOrder.getId();
-
+        id = confirmOrder.getId();
     }
+    return id;
+}
 
 //    /**
 //     * 降级方法，需包含限流方法的所有参数和BlockException参数

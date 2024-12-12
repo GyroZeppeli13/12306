@@ -71,6 +71,11 @@ public class ConfirmOrderDoReq {
      */
     private String logId;
 
+    /**
+     * 加入排队人数，用于体验排队功能
+     */
+    private int lineNumber;
+
     @Override
     public String toString() {
         return "ConfirmOrderDoReq{" +
@@ -84,6 +89,7 @@ public class ConfirmOrderDoReq {
                 ", imageCode='" + imageCode + '\'' +
                 ", imageCodeToken='" + imageCodeToken + '\'' +
                 ", logId='" + logId + '\'' +
+                ", lineNumber=" + lineNumber +
                 '}';
     }
 }
